@@ -1,12 +1,15 @@
-import os
+import os, pprint
 import importlib, inspect
+import logging
+logging.basicConfig()
+logger = logging.getLogger(__name__)
 
 BASE = os.path.dirname(__file__)
 MENUSPATH = "{}/menus".format(BASE)
 
 
 MENUCACHE = {}
-def createMenuCache(path=MENUSPATH, pkg="NEdMenuManager.menus"):
+def createMenuCache(path=MENUSPATH, pkg="menus"):
     """
     Recurisvely fetch all the .py modules in the menus folder and any classes defined as a menu and add these to the
     cache
@@ -24,7 +27,8 @@ def createMenuCache(path=MENUSPATH, pkg="NEdMenuManager.menus"):
         else:
             createMenuCache(path="{}/{}".format(path, module), pkg="{}.{}".format(pkg, module))
 
+    logger.info("MenuCache:")
+    pprint.pprint(MENUCACHE)
 
 if __name__ == "__main__":
     createMenuCache(MENUSPATH)
-

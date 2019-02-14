@@ -2,7 +2,7 @@ try:
     from maya import cmds
 except ImportError:
     pass
-from NEdMenuManager.menus import typeIDs as nem_typeids
+from menus import typeIDs as nem_typeids
 import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)

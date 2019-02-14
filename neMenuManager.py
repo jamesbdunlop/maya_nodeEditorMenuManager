@@ -1,16 +1,25 @@
 from maya.app.general import nodeEditorMenus
 import logging
-import NEdMenuManager.factory as neFactory
+import menuFactory as neFactory
 logging.basicConfig()
 logger = logging.getLogger(__name__)
+"""
+usage:
+import sys
+path = "T://software//neMenuManager"
+if path not in sys.path:
+    sys.path.append(path)
 
+import neMenuManager as neMM
+neM = neMM.NodeEditorMenuManager()
+"""
 
 class NodeEditorMenuManager(object):
     def __init__(self, autoLoadMenus=True):
         self.menus = nodeEditorMenus.customInclusiveNodeItemMenuCallbacks
 
         if autoLoadMenus:
-            print("AutoLoading nodeEditor menus now... {}".format(neFactory.MENUCACHE.keys()))
+            logger.info("AutoLoading nodeEditor menus now... {}".format(neFactory.MENUCACHE.keys()))
             for id, menu in neFactory.MENUCACHE.iteritems():
                 self.addMenu(menu=menu)
 
@@ -20,7 +29,6 @@ class NodeEditorMenuManager(object):
         """
         self.menus.append(menu().menufunction())
         logger.info("{}|{} id:{}".format(menu.NODENAME, menu.MENUNAME, menu.ID))
-        print("{}|{} id:{}".format(menu.NODENAME, menu.MENUNAME, menu.ID))
 
     def iterMenuItems(self):
         """
