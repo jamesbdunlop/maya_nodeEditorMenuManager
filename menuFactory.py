@@ -23,8 +23,8 @@ def createMenuCache(path=MENUSPATH, pkg="menus"):
             mod = importlib.import_module(name=".{}".format(module[:-3]), package=pkg)
             for eachMenu in inspect.getmembers(mod, inspect.isclass):
                 menu = eachMenu[1]()
-                MENUCACHE[menu.id()] = menu
-                print(menu.id(), menu.menufunction())
+                if menu.menufunction() is not None:
+                    MENUCACHE[menu.id()] = menu
         else:
             createMenuCache(path="{}/{}".format(path, module), pkg="{}.{}".format(pkg, module))
 
