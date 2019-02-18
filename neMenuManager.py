@@ -1,6 +1,6 @@
 from maya.app.general import nodeEditorMenus
-import logging
 import menuFactory as ne_factory
+import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 """
@@ -11,25 +11,33 @@ if path not in sys.path:
     sys.path.append(path)
 
 import neMenuManager as neMM
-nedMenuManager = neMM.NodeEditorMenuManager()
+nedMenuManager = neMM.NodeEditorMenuManager(autoLoadMenus=True, reload=False)
 for id, e in nedMenuManager.iterMenuItems():
     print(id)
 """
 
 
 class NodeEditorMenuManager(object):
-    def __init__(self, autoLoadMenus=True):
+    def __init__(self, autoLoadMenus=True, reload=False):
         self.menus = nodeEditorMenus.customInclusiveNodeItemMenuCallbacks
         self._ids = []
+        if reload:
+            logger.warning("Resetting ne_factory.MENUCACHE now!")
+            ne_factory.MENUCACHE = {}
+
         if ne_factory.MENUCACHE:
-            self._ids = ne_factory.keys()
+            # We should REMOVE any previously appeded functions in maya or we end up with duplicates!
+            self._ids = ne_factory.MENUCACHE.keys()
             self.removeAll()
         else:
-            logger.warning("Creating MENUCACHE now!")
+            logger.warning("Creating ne_factory.MENUCACHE now!")
             ne_factory.createMenuCache()
 
         if autoLoadMenus:
-            logger.info("AutoLoading nodeEditor menus")
+            # Maya sucks at editing the menus, so we're going to iter twice. First for the mainMenu items
+            # Then again for anything flagged as a subMenu of something else.
+            # This means we only EVER go 1 level deep menu|subMenu NOT menu|menu|subMenu
+
             for id, menu in ne_factory.MENUCACHE.iteritems():
                 self.addMenu(menu=menu)
                 self._ids.append(id)
@@ -40,7 +48,7 @@ class NodeEditorMenuManager(object):
         """
         if menu.menufunction() is not None:
             self.menus.append(menu.menufunction())
-            logger.info("Added: {}|{} id:{} func: {}".format(menu.nodeType(), menu.name(), menu.id(), menu.menufunction()))
+            logger.info("Added: {} id:{} func: {}".format(menu.name(), menu.id(), menu.menufunction()))
 
     def iterMenuItems(self):
         """
@@ -54,27 +62,27 @@ class NodeEditorMenuManager(object):
         :param menuid: `int`
         :return: `bool`
         """
-        logger.info("Removing id {}".format(menuid))
         if menuid in ne_factory.MENUCACHE.keys():
+            menu = ne_factory.MENUCACHE[menuid]
             try:
-                self.menus.remove(ne_factory.MENUCACHE[menuid].menufunction())
+                self.menus.remove(menu.menufunction())
             except ValueError:
-                logger.warning("Failed to remove menuid: {} from maya's internal callback list!".format(menuid))
+                logger.warning("Failed to remove {} from maya's internal callback list!".format(menu.name()))
                 return False
 
             ne_factory.MENUCACHE.pop(menuid, None)
             self._ids.remove(menuid)
 
-            logger.info("Successfully removed menu!")
+            logger.info("Successfully removed menu {}".format(menu.name()))
             return True
 
-        logger.warning("Failed to remove menu!")
         return False
 
     def removeAll(self):
         """Remove all the menus before a reload!"""
-        for eachID in self._ids:
-            self.removeMenu(menuid=eachID)
+        while self._ids:
+            for eachID in self._ids:
+                self.removeMenu(menuid=eachID)
 
     def currentCache(self):
         return ne_factory.MENUCACHE
@@ -86,7 +94,8 @@ class NodeEditorMenuManager(object):
             str += "\t name: {}".format(v.name())
             str += "\t nodeType: {}".format(v.nodeType())
             str += "\t isradial: {}".format(v.isRadial())
-            str += "\t pos: {}\n".format(v.radialPos())
+            str += "\t pos: {}".format(v.radialPos())
             str += "\t func: {}\n".format(v.menufunction())
 
         return str
+

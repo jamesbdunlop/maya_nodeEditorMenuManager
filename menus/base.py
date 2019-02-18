@@ -1,30 +1,25 @@
-try:
-    from maya import cmds
-except ImportError:
-    pass
-from menus import typeIDs as nem_typeids
+from maya import cmds
 import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 
 
 class MenuBase(object):
-    ID = nem_typeids.BASEID
-    MENUNAME = ""
-    NODENAME = ""
+    ID = None
+    MENUNAME = None
+    NODENAME = None
     FUNCTION = None
+    ISSUBMENU = False
+    SUBMENUS = list()
 
-    def __init__(self, isRadial=False, radialPos=""):
+    def __init__(self, isRadial=False, radialPos="", hasSubMenu=False):
         self.__isRadial = isRadial
         self.__radialPos = radialPos
-        self._func = None
-
-    def menu(self):
-        """
-
-        :return: `function`
-        """
-        raise NotImplementedError("Not implemented")
+        self.__func = None
+        self.__hasSubMenu = hasSubMenu
+        # Set the cmd instance on init we want to create only ONE instance of the menuCmd.
+        # So well force that now and reuse it thereafter
+        self.menufunction()
 
     def id(self):
         return self.ID
@@ -41,22 +36,59 @@ class MenuBase(object):
     def radialPos(self):
         return self.__radialPos
 
+    def createMenuItem(self):
+        if self.FUNCTION is None:
+            return
+
+        if self.isRadial():
+            self._menuItem = cmds.menuItem(label=self.MENUNAME, c=self.FUNCTION,
+                                           subMenu=self.hasSubMenu(),
+                                           radialPosition=self.radialPos(),
+                                           )
+            if self.ISSUBMENU:
+                # Reset the maya internal parent so we don't end up
+                # with all subsequent menus parented under this one!!
+                cmds.setParent("..", menu=True)
+        else:
+            self._menuItem = cmds.menuItem(label=self.MENUNAME, c=self.FUNCTION,
+                                           subMenu=self.hasSubMenu(),
+                                           )
+            if self.ISSUBMENU:
+                # Reset the maya internal parent so we don't end up
+                # with all subsequent menus parented under this one!!
+                cmds.setParent("..", menu=True)
+        return self._menuItem
+
+    def hasSubMenu(self):
+        return self.__hasSubMenu
+
+    def subMenus(self):
+        return self.SUBMENUS
+
+    def subMenus(self):
+        return self.SUBMENUS
+
     def menufunction(self):
         if self.FUNCTION is None:
             return
 
-        if self._func is None:
-            def menuCmd(ned, node):
-                if cmds.nodeType(node) == self.NODENAME:
-                    try:
-                        cmds.menuItem(label=self.MENUNAME, radialPosition=self.radialPos(), c=self.FUNCTION)
+        if self.__func is None:
+            if self.NODENAME is not None:
+                # Create the menu command for the node we have rightClicked over in Maya
+                def menuCmd(ned, node):
+                    if cmds.nodeType(node) == self.NODENAME:
+                        self.createMenuItem()
                         return True
-                    except RuntimeError:
-                        logger.warning("Can not create a valid menu item for {}".format(self.MENUNAME))
+                    else:
                         return False
-                else:
-                    return False
-            self._func = menuCmd
+            else:
+                # Add a general menu to all nodes. Take care with Radial positions here as you might clash with a node
+                # based menu item!
+                def menuCmd(ned, node):
+                    self.createMenuItem()
+                    return True
+
+            self.__func = menuCmd
             return menuCmd
         else:
-            return self._func
+            return self.__func

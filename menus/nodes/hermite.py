@@ -7,6 +7,7 @@ import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 
+
 def createOutputJnts(*args):
     ## Create outputs for the selected hermite nodes
     exitB = "Exit"
@@ -33,7 +34,9 @@ class HermiteArraySOUTH(nem_base.MenuBase):
     FUNCTION = createOutputJnts
 
     def __init__(self):
-        nem_base.MenuBase.__init__(self, isRadial=True, radialPos="S")
+        nem_base.MenuBase.__init__(self,
+                                   isRadial=nem_typeids.HASOUTH_ISRADIAL,
+                                   radialPos=nem_typeids.HASOUTH_RADIALPOS)
 
 
 class HermiteArrayNORTH(nem_base.MenuBase):
@@ -42,4 +45,6 @@ class HermiteArrayNORTH(nem_base.MenuBase):
     NODENAME = nem_typeids.HA_NODENAME
 
     def __init__(self):
-        nem_base.MenuBase.__init__(self, isRadial=True, radialPos="N")
+        nem_base.MenuBase.__init__(self,
+                                   isRadial=nem_typeids.HANORTH_ISRADIAL,
+                                   radialPos=nem_typeids.HANORTH_RADIALPOS)
