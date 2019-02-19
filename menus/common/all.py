@@ -19,8 +19,19 @@ class COPYNODES(nem_base.MenuBase):
     FUNCTION = test
     ISSUBMENU = True
 
-    def __init__(self):
-        nem_base.MenuBase.__init__(self)
+    def __init__(self, lastSubMenu=False):
+        nem_base.MenuBase.__init__(self, lastSubMenu=lastSubMenu)
+
+
+class PASTENODES(nem_base.MenuBase):
+    ID = nem_typeids.PASTEID
+    MENUNAME = nem_typeids.PASTE_MENUNAME
+    NODENAME = nem_typeids.COMMONNODENAME
+    FUNCTION = test
+    ISSUBMENU = True
+
+    def __init__(self, lastSubMenu=False):
+        nem_base.MenuBase.__init__(self, lastSubMenu=lastSubMenu)
 
 
 class UTILS(nem_base.MenuBase):
@@ -32,5 +43,7 @@ class UTILS(nem_base.MenuBase):
     def __init__(self):
         nem_base.MenuBase.__init__(self,
                                    isRadial=nem_typeids.UTILS_ISRADIAL,
+                                   radialPos=nem_typeids.UTILS_RADIALPOS,
                                    hasSubMenu=True)
         self.SUBMENUS.append(COPYNODES())
+        self.SUBMENUS.append(PASTENODES(lastSubMenu=True))
