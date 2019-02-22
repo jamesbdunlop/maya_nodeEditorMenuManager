@@ -33,7 +33,6 @@ def createMenuCache(path=MENUSPATH, pkg="menus"):
                     if menu.hasSubMenu():
                         for eachChild in menu.subMenus():
                             MENUCACHE[eachChild.id()] = eachChild
-
         else:
             createMenuCache(path="{}/{}".format(path, module), pkg="{}.{}".format(pkg, module))
 
