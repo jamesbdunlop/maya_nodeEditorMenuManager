@@ -1,5 +1,6 @@
 from maya.app.general import nodeEditorMenus
 import menuFactory as ne_factory
+reload(ne_factory)
 import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -10,10 +11,8 @@ path = "T://software//neMenuManager"
 if path not in sys.path:
     sys.path.append(path)
 
-import neMenuManager as neMM
-nedMenuManager = neMM.NodeEditorMenuManager(autoLoadMenus=True, reload=False)
-for id, e in nedMenuManager.iterMenuItems():
-    print(id)
+import menuManager as menuManager
+mmWin = menuManager.NodeEditorMenuManager(reload=True)
 """
 
 

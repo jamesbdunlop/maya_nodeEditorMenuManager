@@ -11,9 +11,8 @@ MENUCACHE = {}
 
 def createMenuCache(path=MENUSPATH, pkg="menus"):
     """
-    Recurisvely fetch all the .py modules in the menus folder and any
+    Recursively fetch all the .py modules in the menus folder and any
     classes defined as a menu and add these to the cache
-
 
     :param path: `str` path to the root menus folder
     :param pkg: `str` .separated path for the importlib.import_module to use
