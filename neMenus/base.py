@@ -28,7 +28,8 @@ class NEMenu:
         See menus.TransformExample
 
         Args:
-            node (str): Name of the node that the menu was invoked over. This is passed along by Maya.
+            node (str): Name of the node that the menu was invoked over. This is passed along by Maya. Add the arg
+                        but don't use it. Use the self.MNODE you store in the menuFunction()
 
         Returns:
             None
