@@ -16,6 +16,7 @@ MODULE_MAPPING = {
         ["neMenus", ".example", "MenuExample01"],
         ["neMenus", ".example", "MenuExample02"],
         ["neMenus", ".example", "MenuExample03"],
+        ["neMenus", ".transform", "ResetTransform"],
         ],
     nemmc_nodeTypes.COMMONNODENAME: [
         ["neMenus", ".example", "MenuExample04"],
