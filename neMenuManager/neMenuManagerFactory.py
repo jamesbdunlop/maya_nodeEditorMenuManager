@@ -4,19 +4,12 @@ import importlib
 import inspect
 import logging
 
-from nodeEditorMenuManger import neMenuManger as nedmm_neMenus
-from nodeEditorMenuManger.constants import modulemapping as nedmmc_modulemapping
+from neMenuManager.neMenuManger import NEDMenuManager
+import nemodulemapping as nemodulemapping
 
 logger = logging.getLogger(__name__)
 
-MODULE_MAPPING = nedmmc_modulemapping.MODULE_MAPPING
-
-"""
-# USAGE:
-from nodeEditorMenuManger import factory as nedmm_factory
-manager = nedmm_factory.addAllMenus(removeFirst=False)
-"""
-
+MODULE_MAPPING = nemodulemapping.MODULE_MAPPING
 
 def addNodeEditorMenusByNodeType(nodeType, manager=None):
     """
@@ -25,10 +18,10 @@ def addNodeEditorMenusByNodeType(nodeType, manager=None):
         nodeType (str): Name of the nodeType in Maya. eg: "transform"
 
     Returns:
-        nedmm_neMenus.NEDMenuManager()
+        neMenuManager.NEDMenuManager()
     """
     if manager is None:
-        manager = nedmm_neMenus.NEDMenuManager()
+        manager = NEDMenuManager()
 
     for package, moduleName, className in MODULE_MAPPING.get(nodeType, [[None] * 3]):
         if moduleName is None or package is None or className is None:
@@ -58,7 +51,7 @@ def addAllMenus(removeFirst=False):
     Returns:
         None
     """
-    manager = nedmm_neMenus.NEDMenuManager()
+    manager = NEDMenuManager()
     if removeFirst:
         manager.removeAll()
 
@@ -68,12 +61,12 @@ def addAllMenus(removeFirst=False):
     return manager
 
 def removeAllMenus():
-    """ Removes all the menus as expected.
+    """ Removes all the menus.
 
     Returns:
         None
     """
-    manager = nedmm_neMenus.NEDMenuManager()
+    manager = NEDMenuManager()
     manager.removeAll()
 
     return manager

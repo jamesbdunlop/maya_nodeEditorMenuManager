@@ -30,7 +30,7 @@ class NEDMenuManager:
             if menu.ID in self.activeMenus.keys():
                 self.removeMenu(menu.ID)
 
-            self.activeMenus[menu.ID] = [menu, menu.getfunction]
+            self.activeMenus[menu.ID] = [menu, menu.menuFunction]
             self.menus.append(self.activeMenus[menu.ID][1])
             logger.info("Added: \t{}|{} id:{}".format(menu.NODE_TYPE, menu.MENU_NAME, menu.ID))
 
