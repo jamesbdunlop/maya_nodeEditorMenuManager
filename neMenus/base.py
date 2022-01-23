@@ -19,7 +19,7 @@ class NEMenu:
                    'enableCommandRepeat': False, # Note this will error if set to True.
                    'boldFont': True,
                    }
-    _NODE = None
+    MNODE = None
 
     @staticmethod
     def doIt(node):

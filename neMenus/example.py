@@ -1,7 +1,7 @@
 #  Copyright (c) 2020.  James B Dunlop
 # pylint: disable=import-error, invalid-name, missing-class-docstring, line-too-long, missing-module-docstring, invalid-name
 from maya import cmds as cmds
-from edMenus import base as nedmm_base
+from neMenus import base as nedmm_base
 from neMenuManager.constants import nodeTypes as nedmmc_nodetypes
 
 
@@ -15,10 +15,10 @@ class MenuExample01(nedmm_base.NEMenu):
     def doIt(node):
         print("#############################")
         print("node: %s", node)
-        print("MenuExample01._NODE: %s", MenuExample01._NODE)
+        print("MenuExample01.MNODE: %s", MenuExample01.MNODE)
 
     def menuFunction(self, ned, node):
-        MenuExample01._NODE = node
+        MenuExample01.MNODE = node
         nedmm_base.NEMenu._menuFunction(self, ned, node, func=self.doIt)
 
 
@@ -34,10 +34,10 @@ class MenuExample02(nedmm_base.NEMenu):
     def doIt(node):
         print("#############################")
         print("node: %s", node)
-        print("MenuExample02._NODE: %s", MenuExample02._NODE)
+        print("MenuExample02.MNODE: %s", MenuExample02.MNODE)
 
     def menuFunction(self, ned, node):
-        MenuExample02._NODE = node
+        MenuExample02.MNODE = node
         nedmm_base.NEMenu._menuFunction(self, ned, node, func=self.doIt)
 
 
@@ -74,7 +74,7 @@ class MenuExample03(nedmm_base.NEMenu):
     def menuFunction(self, ned, node):
         # This constructs a more complex menu structure with xNum of subMenus.
         # Note the use of cmds.setParent here if incorrectly used your menus will not look correct!!!
-        MenuExample03._NODE = node
+        MenuExample03.MNODE = node
         nedmm_base.NEMenu._menuFunction(self, ned, node)
         # SubMenuItem01
         cmds.menuItem(label="example03SubMenu1Item1", c=self.subMenu1_item1_DoIt)

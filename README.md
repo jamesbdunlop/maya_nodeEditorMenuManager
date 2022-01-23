@@ -2,11 +2,42 @@
 
 This is a small handler for adding and removing menus from the nodeEditor in Maya.
 
-**Adding a menu:**
-------------------
+**Important:**
+==============
+To add a menu, it is defined in 2 parts.
+1. A new menu class in the neMenus, subClassing the menus.base class.
+2. An entry into the modulemapping to allow the factory to automatically add your menu the 
+next time you invoke the addMenus()
 
-Comes in 2 parts.
-1. An entry into the constants.modulemapping to allow the factory to automatically add your menu the 
-next time you invoke the addAll
-2. A menu class in the .menus; subClassing the menus.base class.
+Adding a menu:
+==============
+Step 1:
+-------
+To create a new menu you should inherit from the base class.
+Go ahead and create a new .py file or add a class to an existing in the neMenus folder.
 
+Step 2:
+-------
+Be sure to over load the menuFunction() and doIt() methods. 
+It's important to set the class attr for MNODE if you want to use this data passed along by Maya that you invoked the menu
+from, and then to avoid typing the same boilerPlate over and over call the protected _menuFunction eg:
+```
+    def menuFunction(self, ned, node):
+        MenuExample01.MNODE = node
+        nedmm_base.NEMenu._menuFunction(self, ned, node, func=self.doIt)
+```
+
+The doIt() is all the code you need to run when the menu is triggered. Be sure to leave the node arg there, though this is usually a bool.
+
+Usage:
+======
+Inside Maya in a python script editor;
+```
+import sys
+paths = ["PATHTOREPO/maya_nodeEditorMenuManager"]
+for path in paths:
+    sys.path.append(path)
+
+import neMenuMngr as neMenuMngr
+neMenuMngr.addMenus(removeFirst=True)
+```
