@@ -45,14 +45,14 @@ def addNodeEditorMenusByNodeType(nodeType, manager=None):
 
     return manager
 
-def addMenus(removeFirst=False):
+def addMenus(removeExisting=False):
     """ Iter through the entire MODULE_MAPPING dict and add all the nodeTypes to the menuManager.
 
     Returns:
         None
     """
     manager = MenuManager()
-    if removeFirst:
+    if removeExisting:
         manager.removeAll()
 
     for nodeType in MODULE_MAPPING.keys():

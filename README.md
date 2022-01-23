@@ -83,5 +83,5 @@ for path in paths:
 
 # Add the menus now..
 import neMenuMngr as neMenuMngr
-neMenuMngr.addMenus(removeFirst=True)
+neMenuMngr.addMenus(removeExisting=True)
 ```
