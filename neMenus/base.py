@@ -3,6 +3,7 @@
 import logging
 
 from maya import cmds as cmds
+import maya.api.OpenMaya as om2
 
 logger = logging.getLogger(__name__)
 
@@ -34,32 +35,39 @@ class NEMenu:
         """
         pass
 
-    def _menuFunction(self, ned, node, func=""):
+    def _menuFunction(self, ned, node, func="", skipNodeTypeCheck=False):
         """ Please see the example.py menu for the use of this method with the menuFunction() method.
 
         This is here to mainly just remove some boiler plate from the menuFunction, and should be added after you have
         set the node as a class attr in your menuFunction method for your menu.
 
         Args:
-            ned: For Internal Maya Use
-            node: For Internal Maya Use
-            func: The function the command will be associated with via the cmds.menuItem
+            ned (str): For Internal Maya Use
+            node (str): For Internal Maya Use
+            func (function): The function the command will be associated with via the cmds.menuItem
+            skipNodeTypeCheck (bool):
 
         Returns:
             Bool
         """
+        # Note sticking to cmds here as om2 can return a kPluginDependNode which is non descript if you want to add to
+        # something like the inverseMatrix node etc..
         nodetype = cmds.nodeType(node)
-        if nodetype != self.NODE_TYPE:
+        if nodetype != self.NODE_TYPE and not skipNodeTypeCheck:
             return False
 
         if self.IS_RADIAL:
-            cmds.menuItem(radialPosition=self.POSITION, label=self.MENU_NAME,
-                          c=func, **self.MENU_KWARGS)
+            cmds.menuItem(radialPosition=self.POSITION,
+                          label=self.MENU_NAME,
+                          c=func,
+                          **self.MENU_KWARGS)
             return True
 
-        cmds.menuItem(label=self.MENU_NAME, c=func, **self.MENU_KWARGS)
-
+        cmds.menuItem(label=self.MENU_NAME,
+                      c=func,
+                      **self.MENU_KWARGS)
         return True
 
     def menuFunction(self):
+        """Intended to be over loaded per menu. Check example.py for uses"""
         pass

@@ -51,6 +51,7 @@ class MenuExample03(nedmm_base.NEMenu):
                    'enableCommandRepeat': False,
                    'boldFont': True,
                    }
+
     @staticmethod
     def subMenu1_item1_DoIt(node):
         print("#############################")
@@ -75,7 +76,12 @@ class MenuExample03(nedmm_base.NEMenu):
         # This constructs a more complex menu structure with xNum of subMenus.
         # Note the use of cmds.setParent here if incorrectly used your menus will not look correct!!!
         MenuExample03.MNODE = node
-        nedmm_base.NEMenu._menuFunction(self, ned, node)
+        # Because all the other examples don't care for appending menus etc we should check if we the _menuFunction
+        # found the correct nodeType or not.
+        status = nedmm_base.NEMenu._menuFunction(self, ned, node)
+        if not status:
+            return status
+
         # SubMenuItem01
         cmds.menuItem(label="example03SubMenu1Item1", c=self.subMenu1_item1_DoIt)
         # SubMenuItem02
@@ -85,3 +91,19 @@ class MenuExample03(nedmm_base.NEMenu):
         cmds.setParent('..', menu=True)
         cmds.menuItem(label="example03SubMenu1Item3", c=self.subMenu1_item3_DoIt)
         cmds.setParent('..', menu=True)
+
+
+# Common Menu
+class MenuExample04(nedmm_base.NEMenu):
+    ID = "menuExample04"
+    NODE_TYPE = nedmmc_nodetypes.COMMONNODENAME
+    MENU_NAME = "CommonExampleMenu04"
+
+    @staticmethod
+    def doIt(node):
+        print("#############################")
+        print("I am MenuExample04 doIt!")
+
+    def menuFunction(self, ned, node):
+        MenuExample04.MNODE = node
+        nedmm_base.NEMenu._menuFunction(self, ned, node, func=self.doIt, skipNodeTypeCheck=True)

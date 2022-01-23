@@ -7,7 +7,7 @@ from maya.app.general import nodeEditorMenus
 logger = logging.getLogger(__name__)
 
 
-class NEDMenuManager:
+class MenuManager:
     """ Setup singleton for the NEDMenus to use"""
     instance = None
 
@@ -77,9 +77,9 @@ class NEDMenuManager:
             return rprstr
 
     def __new__(cls, *args, **kwargs):
-        if NEDMenuManager.instance is None:
-            NEDMenuManager.instance = NEDMenuManager.__NodeEditorMenus()
-        return NEDMenuManager.instance
+        if MenuManager.instance is None:
+            MenuManager.instance = MenuManager.__NodeEditorMenus()
+        return MenuManager.instance
 
     def __getattr__(self, item):
         return getattr(self.instance, item)
