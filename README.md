@@ -27,10 +27,21 @@ from, and then to avoid typing the same boilerPlate over and over call the prote
         nedmm_base.NEMenu._menuFunction(self, ned, node, func=self.doIt)
 ```
 
-The doIt() is all the code you need to run when the menu is triggered. Be sure to leave the node arg there, though this is usually a bool.
+The doIt() is all the code you need to run when the menu is triggered. Be sure to have the node arg as that is 
+required by Maya, though this is usually a bool.
 
+For more complex menus with subMenus etc refer to MenuExample03 in the example.py
+
+Step 3:
+------
+Add the correct data to the nemodulemapping.py file into the MODULE_MAPPING dict. This is for the factory to find and import the menu classes.
+Check the doc string in the file for more info.
+
+______
 Usage:
-======
+------
+Once you're done with that you should be good to run the usage below.
+
 Inside Maya in a python script editor;
 ```
 import sys
