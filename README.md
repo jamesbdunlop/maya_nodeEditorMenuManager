@@ -2,6 +2,8 @@
 
 This is a small handler for adding and removing menus from the nodeEditor in Maya.
 
+![exampleGif](/nemm_example.gif)
+
 **Important:**
 ==============
 To add a menu, it is defined in 2 parts.

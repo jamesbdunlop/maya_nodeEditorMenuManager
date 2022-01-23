@@ -12,3 +12,11 @@ def addMenus(removeFirst=True):
         None
     """
     mm_factory.addAllMenus(removeFirst=removeFirst)
+
+def removeMenus():
+    """ Removes all the menus.
+
+    Returns:
+        None
+    """
+    mm_factory.removeAllMenus()
