@@ -54,8 +54,9 @@ class NEMenu:
         # Note sticking to cmds here as om2 can return a kPluginDependNode which is non descript if you want to add to
         # something like the inverseMatrix node etc..
         nodetype = cmds.nodeType(node)
-        if nodetype != self.NODE_TYPE and not skipNodeTypeCheck:
-            return False
+        if self.NODE_TYPE is not None:
+            if nodetype != self.NODE_TYPE and not skipNodeTypeCheck:
+                return False
 
         if self.IS_RADIAL:
             cmds.menuItem(radialPosition=self.POSITION,
